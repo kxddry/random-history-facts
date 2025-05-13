@@ -6,7 +6,6 @@ import (
     "fmt"
     "github.com/kxddry/random-history-facts/internal/config"
     "github.com/kxddry/random-history-facts/internal/http-server/handlers/post"
-    "github.com/kxddry/random-history-facts/internal/lib/factmatcher"
     "github.com/kxddry/random-history-facts/internal/storage"
     _ "github.com/lib/pq"
 )
@@ -14,10 +13,6 @@ import (
 type Storage struct {
     threshold float64
     db        *sql.DB
-}
-
-type FactMatcher interface {
-    post.FactMatcher
 }
 
 func New(cfg *config.Config) (*Storage, error) {
@@ -38,7 +33,7 @@ func New(cfg *config.Config) (*Storage, error) {
     return &Storage{db: db, threshold: cfg.Threshold}, db.Ping()
 }
 
-func (s *Storage) AddFact(matcher factmatcher.Fact_Matcher, fact string) (int64, error) {
+func (s *Storage) AddFact(matcher post.FactMatcher, fact string) (int64, error) {
     const op = "storage.postgres.AddFact"
     
     threshold := s.threshold

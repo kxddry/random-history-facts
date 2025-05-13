@@ -5,7 +5,6 @@ import (
     "github.com/go-chi/render"
     "github.com/go-playground/validator/v10"
     resp "github.com/kxddry/random-history-facts/internal/lib/api/response"
-    "github.com/kxddry/random-history-facts/internal/lib/factmatcher"
     "github.com/kxddry/random-history-facts/internal/lib/logger/sl"
     "github.com/kxddry/random-history-facts/internal/storage"
     "io"
@@ -18,7 +17,7 @@ type Request struct {
 }
 
 type FactSaver interface {
-    AddFact(matcher factmatcher.Fact_Matcher, fact string) (int64, error)
+    AddFact(matcher FactMatcher, fact string) (int64, error)
 }
 
 type Response struct {
@@ -31,7 +30,7 @@ type FactMatcher interface {
     Normalize(fact string) string
 }
 
-func New(log *slog.Logger, fs FactSaver, fm factmatcher.Fact_Matcher) http.HandlerFunc {
+func New(log *slog.Logger, fs FactSaver, fm FactMatcher) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         const op = "handlers.post.New"
         
