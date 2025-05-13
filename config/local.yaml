@@ -1,0 +1,15 @@
+env: "local"  # local, dev, prod
+threshold: 0.7 # threshold for finding similar facts
+
+storage:
+    host: "localhost"
+    port: 5432
+    user: "postgres"
+    password: "password"
+    dbname: "facts"
+    sslmode: "disable"
+
+http_server:
+    address: "localhost:8085"
+    timeout: 5s
+    idle_timeout: 60s
