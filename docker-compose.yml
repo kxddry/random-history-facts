@@ -2,8 +2,8 @@
 services:
     backend:
         build:
-            context: .\scraper
-            dockerfile: .\scraper\Dockerfile
+            context: .
+            dockerfile: Dockerfile
         ports:
             - "8080:8080"
         depends_on:
