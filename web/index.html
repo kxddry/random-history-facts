@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fun History Facts</title>
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Animate.css for simple animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
+  <h1 class="text-2xl font-bold mb-4 text-center">Fun History Facts</h1>
+  <!-- Fact display area -->
+  <div id="fact" class="text-center text-gray-700 text-lg h-20 flex items-center justify-center animate__animated"></div>
+  <!-- Button to fetch a new fact -->
+  <button id="newFact" class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg shadow hover:bg-blue-600 transition-colors">Get New Fact</button>
+  <!-- Form to submit a new fact -->
+  <form id="factForm" class="mt-6">
+    <input type="text" id="factInput" placeholder="Enter a fun fact" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    <button type="submit" class="mt-2 w-full bg-green-500 text-white py-2 rounded-lg shadow hover:bg-green-600 transition-colors">Submit Fact</button>
+  </form>
+  <!-- Feedback messages -->
+  <div id="message" class="mt-4 text-center text-red-500"></div>
+</div>
+
+<script>
+  const factDiv = document.getElementById('fact');
+  const messageDiv = document.getElementById('message');
+
+  async function getFact() {
+    messageDiv.textContent = '';
+    factDiv.classList.remove('animate__fadeIn');
+    try {
+      const res = await fetch('/api/');
+      const data = await res.json();
+      factDiv.textContent = data.info;
+      factDiv.classList.add('animate__fadeIn');
+    } catch (err) {
+      factDiv.textContent = 'Failed to load fact.';
+      factDiv.classList.add('animate__fadeIn');
+    }
+  }
+
+  // Fetch a new fact on button click
+  document.getElementById('newFact').addEventListener('click', (e) => {
+    e.preventDefault();
+    getFact();
+  });
+
+  // Handle form submission
+  document.getElementById('factForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    messageDiv.textContent = '';
+    const fact = document.getElementById('factInput').value.trim();
+    if (!fact) {
+      messageDiv.textContent = 'Please enter a fact.';
+      return;
+    }
+    try {
+      const res = await fetch('/api/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fact })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        messageDiv.classList.remove('text-red-500');
+        messageDiv.classList.add('text-green-500');
+        messageDiv.textContent = 'Fact submitted! ID: ' + data.id;
+        document.getElementById('factInput').value = '';
+      } else {
+        messageDiv.textContent = data.error || 'Error submitting.';
+      }
+    } catch (err) {
+      messageDiv.textContent = 'Network error.';
+    }
+  });
+
+  // Load initial fact on page load
+  window.addEventListener('load', getFact);
+</script>
+</body>
+</html>

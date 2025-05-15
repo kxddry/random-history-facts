@@ -1,0 +1,36 @@
+
+services:
+    backend:
+        build:
+            context: .\scraper
+            dockerfile: .\scraper\Dockerfile
+        ports:
+            - "8080:8080"
+        depends_on:
+            - db
+        environment:
+            - DB_HOST=db
+            - DB_PORT=5432
+            - DB_USER=postgres
+            - DB_PASSWORD=password
+            - DB_NAME=facts
+            - CONFIG_PATH=./config/local.yaml
+
+    frontend:
+        build: web
+        ports:
+            - "5173:80"
+
+    db:
+        image: postgres:17
+        restart: always
+        environment:
+            POSTGRES_DB: facts
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+        volumes:
+            - db_data:/var/lib/postgresql/data
+            - ./migrations:/docker-entrypoint-initdb.d
+
+volumes:
+    db_data:

@@ -10,6 +10,6 @@ storage:
     sslmode: "disable"
 
 http_server:
-    address: "localhost:8085"
+    address: "localhost:8080"
     timeout: 5s
     idle_timeout: 60s
