@@ -12,3 +12,7 @@ tasks:
         desc: "init all required tables"
         cmds:
             - go run ./cmd/migrator --config=config/migration.yaml
+    migrate-down:
+        desc: "drop all tables"
+        cmds:
+            - go run ./cmd/migrator --config=config/migration.yaml --operation=down

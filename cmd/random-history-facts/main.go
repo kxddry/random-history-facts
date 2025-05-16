@@ -35,7 +35,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fm := factmatcher.Fact_Matcher{}
+	fm := factmatcher.FactMatcher{}
 
 	router := chi.NewRouter()
 
