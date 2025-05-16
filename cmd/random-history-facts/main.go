@@ -75,7 +75,6 @@ func main() {
 	<-stop
 	log.Info("Shutting down HTTP server")
 	_ = srv.Shutdown(context.Background())
-	log.Info("Shutting down Redis server")
 	log.Info("Shutting down SQL connection")
 	_ = store.Close()
 	log.Info("Application stopped")

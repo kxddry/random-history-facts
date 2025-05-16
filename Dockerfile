@@ -16,4 +16,4 @@ RUN go build -o server ./cmd/random-history-facts
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "./migrator --config=./config/migrations.yaml && ./server"]
+CMD ["sh", "-c", "./migrator --config=./config/migration.yaml && ./server"]
