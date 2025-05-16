@@ -4,24 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Интересные исторические факты</title>
-  <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Animate.css for simple animations -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 <div class="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
   <h1 class="text-2xl font-bold mb-4 text-center">Интересные исторические факты</h1>
-  <!-- Fact display area -->
-  <div id="fact" class="text-center text-gray-700 text-lg h-20 flex items-center justify-center animate__animated"></div>
-  <!-- Button to fetch a new fact -->
+  <div id="fact" class="text-center text-gray-700 text-lg px-4 py-4 min-h-[5rem] animate__animated overflow-auto"></div>
   <button id="newFact" class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg shadow hover:bg-blue-600 transition-colors">Ещё один факт</button>
-  <!-- Form to submit a new fact -->
   <form id="factForm" class="mt-6">
     <input type="text" id="factInput" placeholder="Отправьте и свой факт!" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
     <button type="submit" class="mt-2 w-full bg-green-500 text-white py-2 rounded-lg shadow hover:bg-green-600 transition-colors">Отправить</button>
   </form>
-  <!-- Feedback messages -->
   <div id="message" class="mt-4 text-center text-red-500"></div>
 </div>
 
@@ -36,21 +30,18 @@
       const res = await fetch('/api/');
       const data = await res.json();
       factDiv.textContent = data.info;
-      factDiv.classList.add('animate__fadeIn');
-    } catch (err) {
+    } catch {
       factDiv.textContent = 'Не удалось загрузить факт.';
-      factDiv.classList.add('animate__fadeIn');
     }
+    factDiv.classList.add('animate__fadeIn');
   }
 
-  // Fetch a new fact on button click
-  document.getElementById('newFact').addEventListener('click', (e) => {
+  document.getElementById('newFact').addEventListener('click', e => {
     e.preventDefault();
     getFact();
   });
 
-  // Handle form submission
-  document.getElementById('factForm').addEventListener('submit', async (e) => {
+  document.getElementById('factForm').addEventListener('submit', async e => {
     e.preventDefault();
     messageDiv.textContent = '';
     const fact = document.getElementById('factInput').value.trim();
@@ -73,12 +64,11 @@
       } else {
         messageDiv.textContent = data.error || 'Ошибка отправки.';
       }
-    } catch (err) {
+    } catch {
       messageDiv.textContent = 'Ошибка сети.';
     }
   });
 
-  // Load initial fact on page load
   window.addEventListener('load', getFact);
 </script>
 </body>
