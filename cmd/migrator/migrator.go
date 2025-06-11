@@ -30,7 +30,7 @@ func main() {
 	pSt.DBName = "postgres"
 	dsn := DataSourceName(pSt)
 	link := Link(cfg.Storage)
-	err := retry(5, func() error { return EnsureDBexists(cfg.Storage.DBName, dsn) })
+	err := retry(30, func() error { return EnsureDBexists(cfg.Storage.DBName, dsn) })
 
 	if err != nil {
 		log.Fatal(err)
