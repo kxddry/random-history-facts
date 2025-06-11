@@ -30,9 +30,10 @@ func main() {
 	pSt.DBName = "postgres"
 	dsn := DataSourceName(pSt)
 	link := Link(cfg.Storage)
-	err := EnsureDBexists(cfg.Storage.DBName, dsn)
+	err := retry(5, func() error { return EnsureDBexists(cfg.Storage.DBName, dsn) })
+
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	m, err := migrate.New("file://"+cfg.Migrations.Path, link)
